@@ -1603,19 +1603,6 @@ function dofus_protocol.dissector(buf, pinfo, tree)
 		msg_len = bit.lshift(bit.band(buf(msg_offset + 2, 1):uint(), 255), 16) + bit.lshift(bit.band(buf(msg_offset + 3, 1):uint(), 255), 8) + bit.band(buf(msg_offset + 4, 1):uint(), 255)
 	end
 
-	if type_bf == 8522 then
-		print("type_bf: " .. type_bf)
-		print("msglensize: " .. msg_len_size)
-		print("msglen" .. msg_len)
-	end
-
-
-    -- local msg_number_size = 0
-    -- if is_packet_outgoing(pinfo) then
-    --   msg_number_size = 4
-    --   msg_tree:add(msg_number_field, buf(msg_offset + 2, msg_number_size))
-    -- end
-
     -- Truncated message (https://wiki.wireshark.org/Lua/Dissectors)
     if msg_offset + 2 + msg_len_size + msg_len > buf:len() then
         pinfo.desegment_len = DESEGMENT_ONE_MORE_SEGMENT
@@ -1627,7 +1614,7 @@ function dofus_protocol.dissector(buf, pinfo, tree)
         msg_tree:add(msg_len_field, msg_len)
     end
 
-    local msg_full_len = 2 + msg_len_size + msg_len
+    local msg_full_len = 2 + msg_len_size + msg_len 
     msg_tree:set_len(msg_full_len)
 
     -- Truncated message (https://wiki.wireshark.org/Lua/Dissectors)
